@@ -29,7 +29,7 @@ parser.add_argument('-o', '--outfile', default=None,
     help='Provide a file path to which the currently playing song should be written',
 )
 
-parser.add_argument('v', '--version',
+parser.add_argument('-v', '--version',
     action='version',
     version='%(prog)s {version}'.format(version=__version__)
 )

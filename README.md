@@ -49,7 +49,7 @@ optional arguments:
   -q, --quiet           Suppress console output of currently playing song
   -o OUTFILE, --outfile OUTFILE
                         Provide a file path to which the currently playing song should be written
-  --version             show program's version number and exit
+  -v, --version         show program's version number and exit
 
 Note that you must configure Traktor to broadcast to localhost and the port specified with the -p, or --port option (defaults to 8000). For the format setting you can use anything, but I recommend
 choosing the lowest bitrate for the sample rate of your system, so most commonly the best choice is 44100 Hz, 64 Kbps.
