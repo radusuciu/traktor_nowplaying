@@ -4,6 +4,7 @@ Contains a command-line interface implemented with argparse.
 
 from .core import Listener
 from .options import PORT, QUIET
+from .version import __version__
 import argparse
 
 DESCRIPTION = 'Use Traktor\'s broadcast functionality to extract metadata about the currently playing song'
@@ -26,6 +27,11 @@ parser.add_argument('-q', '--quiet', default=QUIET,
 
 parser.add_argument('-o', '--outfile', default=None,
     help='Provide a file path to which the currently playing song should be written',
+)
+
+parser.add_argument('v', '--version',
+    action='version',
+    version='%(prog)s {version}'.format(version=__version__)
 )
 
 args = parser.parse_args()
