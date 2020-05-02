@@ -34,6 +34,14 @@ def create_request_handler(callbacks):
                     for callback in callbacks:
                         callback(metadata)
 
+        def log_request(self, code='-', size='-'):
+            """Do not log messages about HTTP requests."""
+            pass
+
+        def log_error(self, format, *args):
+            """Do not log messages about HTTP requests."""
+            pass
+
     return TraktorHandler
 
 def _get_track_string(data):
@@ -42,7 +50,9 @@ def _get_track_string(data):
     return track_string if len(track_string) > 3 else ''
 
 def _output_to_console(data):
-    print(_get_track_string(data))
+    track_string = _get_track_string(data)
+    if track_string:
+        print(track_string)
 
 def _output_to_file(data, outfile):
     with open(outfile, 'w') as f:
