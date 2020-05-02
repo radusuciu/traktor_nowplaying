@@ -12,17 +12,9 @@ def read(*parts):
     """Return multiple read calls to different readable objects as a single string."""
     return codecs.open(os.path.join(here, *parts), 'r').read()
 
-def read_md(file):
-    try:
-        from pypandoc import convert
-        return convert(file, 'rst')
-    except ImportError:
-        print('Error: pypandoc module not found, could not convert Markdown to RST')
-
-
 NAME = 'traktor_nowplaying'
 DESCRIPTION = f'{NAME} uses Traktor\'s broadcast functionality to extract metadata about the currently playing song.'
-LONG_DESCRIPTION = read_md('README.md')
+LONG_DESCRIPTION = read('README.md')
 URL = 'https://github.com/radusuciu/traktor_nowplaying'
 EMAIL = 'radusuciu@gmail.com'
 AUTHOR = 'Radu Suciu'
@@ -76,6 +68,7 @@ setup(
     author_email=EMAIL,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
+    long_description_content_type='text/markdown',
     packages=find_packages(exclude=('tests',)),
     entry_points={
         'console_scripts': ['traktor_nowplaying=traktor_nowplaying.cli:main']
