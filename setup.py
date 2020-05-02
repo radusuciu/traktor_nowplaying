@@ -1,4 +1,4 @@
-"""Setup script for traktor_now_playing."""
+"""Setup script for traktor_nowplaying."""
 from setuptools import setup, find_packages, Command
 from shutil import rmtree
 import codecs
@@ -20,16 +20,16 @@ def read_md(file):
         print('Error: pypandoc module not found, could not convert Markdown to RST')
 
 
-NAME = 'traktor_now_playing'
+NAME = 'traktor_nowplaying'
 DESCRIPTION = f'{NAME} uses Traktor\'s broadcast functionality to extract metadata about the currently playing song.'
 LONG_DESCRIPTION = read_md('README.md')
-URL = 'https://github.com/radusuciu/traktor_now_playing'
+URL = 'https://github.com/radusuciu/traktor_nowplaying'
 EMAIL = 'radusuciu@gmail.com'
 AUTHOR = 'Radu Suciu'
 
 # not doing import because do not want to have to load module
 # before it has been installed
-version_path = os.path.join(here, 'traktor_now_playing/version.py')
+version_path = os.path.join(here, 'traktor_nowplaying/version.py')
 exec(read(version_path))
 VERSION = __version__
 
@@ -78,7 +78,7 @@ setup(
     long_description=LONG_DESCRIPTION,
     packages=find_packages(exclude=('tests',)),
     entry_points={
-        'console_scripts': ['traktor_now_playing=traktor_now_playing.cli:main']
+        'console_scripts': ['traktor_nowplaying=traktor_nowplaying.cli:main']
     },
     include_package_data=True,
     platforms='any',

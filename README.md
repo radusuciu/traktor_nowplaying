@@ -11,7 +11,7 @@ Lastly, there are several other projects that do something similar such as [Trak
 The preferred installation method is via [pip](https://pip.pypa.io/en/stable/):
 
 ```bash
-pip install traktor_now_playing
+pip install traktor_nowplaying
 ```
 
 Eventually, I'd like to leverage GitHub actions to automate the creation of binary releases using `pyInstaller` or something similar, but this is not setup at the moment.
@@ -28,18 +28,18 @@ Note that there is a delay between when you change a song in Traktor and when th
 
 Default options: listen on port `8000`, and output the currently playing song to the console:
 ```bash
-traktor_now_playing
+traktor_nowplaying
 ```
 
 Listen on port `8000`, output to `nowplaying.txt` in the current directory and do not output to `stdout`:
 ```bash
-traktor_now_playing --port 8000 --outfile='nowplaying.txt' --quiet
+traktor_nowplaying --port 8000 --outfile='nowplaying.txt' --quiet
 ```
 
 The help text:
 ```bash
-$ traktor_now_playing -h
-usage: traktor_now_playing [-h] [-p PORT] [-q] [-o OUTFILE]
+$ traktor_nowplaying -h
+usage: traktor_nowplaying [-h] [-p PORT] [-q] [-o OUTFILE]
 
 Use Traktor's broadcast functionality to extract metadata about the currently
 playing song
@@ -57,10 +57,10 @@ To stop the process `Ctrl + C` should suffice.
 
 ## Use as a library
 
-`traktor_now_playing` can also be used as a library. This can be useful if you'd like to leverage this rather simple functionality in other code.
+`traktor_nowplaying` can also be used as a library. This can be useful if you'd like to leverage this rather simple functionality in other code.
 
 ```python
-from traktor_now_playing import Listener
+from traktor_nowplaying import Listener
 
 listener = Listener(port=8000, quiet=True, outfile='nowplaying.txt')
 listener.start()
