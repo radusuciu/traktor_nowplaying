@@ -35,7 +35,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
-        path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
+        path: dist/traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
 
   MacOS:
     runs-on: macos-latest
@@ -62,7 +62,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
-        path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
+        path: dist/traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
 
   Windows:
     runs-on: windows-latest
@@ -91,7 +91,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
-        path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
+        path: dist/traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
 
   Release:
     needs: [Linux, MacOS, Windows]
