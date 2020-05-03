@@ -61,7 +61,7 @@ jobs:
         pyinstaller traktor_nowplaying/cli.py -n traktor_nowplaying --onefile
     - name: Zipping release
       run: |
-        tar -czvf traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz README.md -C dist traktor_nowplaying
+        tar -czvf traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz README.md -C dist traktor_nowplaying
     - name: Upload release file
       uses: actions/upload-artifact@v1
       with:
