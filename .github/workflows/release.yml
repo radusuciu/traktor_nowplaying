@@ -1,3 +1,5 @@
+# modified heavily from the poetry project https://github.com/python-poetry/poetry
+
 name: Release
 
 on:
@@ -28,11 +30,12 @@ jobs:
     - name: Building release
       run: |
         pyinstaller traktor_nowplaying/cli.py -n traktor_nowplaying --onefile
+        tar -czvf traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz README.md -C dist traktor_nowplaying
     - name: Upload release file
       uses: actions/upload-artifact@v1
       with:
-        name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux
-        path: dist/traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux
+        name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
+        path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
 
   MacOS:
     runs-on: macos-latest
@@ -54,11 +57,12 @@ jobs:
     - name: Building release
       run: |
         pyinstaller traktor_nowplaying/cli.py -n traktor_nowplaying --onefile
+        tar -czvf traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz README.md -C dist traktor_nowplaying
     - name: Upload release file
       uses: actions/upload-artifact@v1
       with:
-        name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos
-        path: dist/traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos
+        name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
+        path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
 
   Windows:
     runs-on: windows-latest
@@ -82,11 +86,12 @@ jobs:
     - name: Building release
       run: |
         pyinstaller traktor_nowplaying/cli.py -n traktor_nowplaying --onefile
+        7z a traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip README.md .\dist\traktor_nowplaying.exe
     - name: Upload release file
       uses: actions/upload-artifact@v1
       with:
-        name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-win
-        path: dist/traktor_nowplaying-${{ steps.tag.outputs.tag }}-win
+        name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
+        path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
 
   Release:
     needs: [Linux, MacOS, Windows]
@@ -102,20 +107,20 @@ jobs:
       - name: Download Linux release file
         uses: actions/download-artifact@master
         with:
-          name: poetry-${{ steps.tag.outputs.tag }}-linux.tar.gz
-          path: releases/poetry-${{ steps.tag.outputs.tag }}-linux.tar.gz
+          name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
+          path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
 
       - name: Download MacOS release file
         uses: actions/download-artifact@master
         with:
-          name: poetry-${{ steps.tag.outputs.tag }}-darwin.tar.gz
-          path: releases/poetry-${{ steps.tag.outputs.tag }}-darwin.tar.gz
+          name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
+          path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
 
       - name: Download Windows release file
         uses: actions/download-artifact@master
         with:
-          name: poetry-${{ steps.tag.outputs.tag }}-win32.tar.gz
-          path: releases/poetry-${{ steps.tag.outputs.tag }}-win32.tar.gz
+          name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
+          path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
 
       - name: Create Release
         id: create_release
@@ -133,8 +138,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: releases/poetry-${{ steps.tag.outputs.tag }}-linux.tar.gz/poetry-${{ steps.tag.outputs.tag }}-linux.tar.gz
-          asset_name: poetry-${{ steps.tag.outputs.tag }}-linux.tar.gz
+          asset_path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
+          asset_name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
           asset_content_type: application/gzip
 
       - name: Upload MacOS release file asset
@@ -143,8 +148,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: releases/poetry-${{ steps.tag.outputs.tag }}-darwin.tar.gz/poetry-${{ steps.tag.outputs.tag }}-darwin.tar.gz
-          asset_name: poetry-${{ steps.tag.outputs.tag }}-darwin.tar.gz
+          asset_path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
+          asset_name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
           asset_content_type: application/gzip
 
       - name: Upload Windows release file asset
@@ -153,9 +158,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: releases/poetry-${{ steps.tag.outputs.tag }}-win32.tar.gz/poetry-${{ steps.tag.outputs.tag }}-win32.tar.gz
-          asset_name: poetry-${{ steps.tag.outputs.tag }}-win32.tar.gz
-          asset_content_type: application/gzip
+          asset_path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
+          asset_name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
+          asset_content_type: application/zip
 
       - name: Set up Python
         uses: actions/setup-python@v1
