@@ -2,9 +2,9 @@
 Contains a command-line interface implemented with argparse.
 """
 
-from .core import Listener
-from .options import PORT, QUIET
-from .version import __version__
+from traktor_nowplaying.core import Listener
+from traktor_nowplaying.options import PORT, QUIET
+from traktor_nowplaying.version import __version__
 import argparse
 
 DESCRIPTION = 'Use Traktor\'s broadcast functionality to extract metadata about the currently playing song'
