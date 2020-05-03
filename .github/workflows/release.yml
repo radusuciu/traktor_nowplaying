@@ -114,19 +114,19 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
-          path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
+          path: ./
 
       - name: Download MacOS release file
         uses: actions/download-artifact@master
         with:
           name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
-          path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
+          path: ./
 
       - name: Download Windows release file
         uses: actions/download-artifact@master
         with:
           name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
-          path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
+          path: ./
 
       - name: Create Release
         id: create_release
@@ -144,7 +144,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
+          asset_path: traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
           asset_name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
           asset_content_type: application/gzip
 
@@ -154,7 +154,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
+          asset_path: traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
           asset_name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
           asset_content_type: application/gzip
 
@@ -164,7 +164,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: releases/traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
+          asset_path: traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
           asset_name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
           asset_content_type: application/zip
 
