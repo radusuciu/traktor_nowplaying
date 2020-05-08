@@ -3,6 +3,7 @@ from .ogg import parse_comment, parse_pages
 import functools
 import http.server
 import socketserver
+import pathlib
 import types
 import io
 import os
@@ -67,6 +68,17 @@ class Listener():
         self.outfile = outfile
         self.custom_callback = custom_callback
 
+    def _create_outfile(self):
+        if not self.outfile:
+            return
+        outpath = pathlib.Path(self.outfile)
+        outpath.parent.mkdir(parents=True, exist_ok=True)
+        outpath.touch(exist_ok=True)
+
+        if not outpath.is_file():
+            print(f'{self.outfile} is a directory!')
+            raise IsADirectoryError
+
     def start(self):
         """Start listening to Traktor broadcast."""
 
@@ -79,7 +91,12 @@ class Listener():
             callbacks.append(_output_to_console)
 
         if self.outfile:
-            callbacks.append(functools.partial(_output_to_file, outfile=self.outfile))
+            try:
+                self._create_outfile()
+                callbacks.append(functools.partial(_output_to_file, outfile=self.outfile))
+            except:
+                print(f'Error encountered while trying to write to {self.outfile}.')
+                return
 
         if self.custom_callback:
             callbacks.append(self.custom_callback)
