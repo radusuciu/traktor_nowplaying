@@ -39,20 +39,27 @@ traktor_nowplaying --port 8000 --outfile='nowplaying.txt' --quiet
 The help text:
 ```bash
 $ traktor_nowplaying -h
-usage: traktor_nowplaying [-h] [-p PORT] [-q] [-o OUTFILE] [--version]
+usage: traktor_nowplaying [-h] [-p PORT] [-q] [-o OUTFILE] [-i] [-v]
 
-Use Traktor's broadcast functionality to extract metadata about the currently playing song
+Use Traktor's broadcast functionality to extract metadata about the currently
+playing song
 
 optional arguments:
   -h, --help            show this help message and exit
   -p PORT, --port PORT  Port to listen on for broadcasts from Traktor
   -q, --quiet           Suppress console output of currently playing song
   -o OUTFILE, --outfile OUTFILE
-                        Provide a file path to which the currently playing song should be written
+                        Provide a file path to which the currently playing
+                        song should be written
+  -i, --interactive     Interactive mode allows for settings to be specified
+                        at runtime. These override command line options.
   -v, --version         show program's version number and exit
 
-Note that you must configure Traktor to broadcast to localhost and the port specified with the -p, or --port option (defaults to 8000). For the format setting you can use anything, but I recommend
-choosing the lowest bitrate for the sample rate of your system, so most commonly the best choice is 44100 Hz, 64 Kbps.
+Note that you must configure Traktor to broadcast to localhost and the port
+specified with the -p, or --port option (defaults to 8000). For the format
+setting you can use anything, but I recommend choosing the lowest bitrate for
+the sample rate of your system, so most commonly the best choice is 44100 Hz,
+64 Kbps.
 ```
 
 To stop the process `Ctrl + C` should suffice.
