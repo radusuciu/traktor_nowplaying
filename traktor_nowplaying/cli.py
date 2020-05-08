@@ -12,10 +12,12 @@ import sys
 
 DESCRIPTION = 'Use Traktor\'s broadcast functionality to extract metadata about the currently playing song'
 EPILOG = f'Note that you must configure Traktor to broadcast to localhost and the port specified with the -p, or --port option (defaults to {PORT}). For the format setting you can use anything, but I recommend choosing the lowest bitrate for the sample rate of your system, so most commonly the best choice is 44100 Hz, 64 Kbps.'
+PROGRAM_NAME = 'traktor_nowplaying'
 
 parser = argparse.ArgumentParser(
     description=DESCRIPTION,
-    epilog=EPILOG
+    epilog=EPILOG,
+    prog=PROGRAM_NAME,
 )
 
 parser.add_argument('-p', '--port', default=PORT,
@@ -42,48 +44,87 @@ parser.add_argument('-v', '--version',
     version='%(prog)s {version}'.format(version=__version__)
 )
 
-# parse arguments at run time
 args = parser.parse_args()
 
+def _exit(status=None):
+    if not args.quiet:
+        print('\n Exiting')
+        sys.exit(status)
+
 # capture Ctrl + C
-signal.signal(signal.SIGINT, lambda signum, frame: sys.exit(1))
+signal.signal(signal.SIGINT, lambda signum, frame: _exit())
 
-def interactive():
-    print('Interactive mode is active. Press Enter to accept the default for each choice.')
-    port = input(f'Please specify port to listen on (default: {PORT}): ') or PORT
-
+def _get_port_interactively():
     MIN_PORT = 1
     MAX_PORT = 65535
 
-    if not isinstance(port, int) or (port < MIN_PORT or port > MAX_PORT):
-        print(f'Port needs to be a an integer between {MIN_PORT}-{MAX_PORT}')
-        print(f'Using default of {PORT}')
-        port = PORT
+    port = None
 
-    quiet = input(f'Quiet mode (suppresses console output)? (Y/[N], default N): ')[0].lower() == 'y'
-    outfile = input('Path of file to output current playing song to (no file output by default): ')
+    while True:
+        try:
+            port = input(f'Please specify port to listen on (press Enter to accept default: {PORT}): ').strip()
 
-    args = parser.parse_args([
-        '--port', port,
-        '--quiet', quiet,
-        '--outfile', outfile,
-    ])
+            # accepted default
+            if port == '':
+                break
+            
+            # attempt to convert to int
+            port = int(port)
+
+            # and make sure it is valid
+            if port < MIN_PORT or port > MAX_PORT:
+                raise ValueError
+        except ValueError:
+            print(f'Port needs to be an integer between {MIN_PORT}-{MAX_PORT}')
+        except KeyboardInterrupt:
+            _exit()
+
+    return port
+
+def interactive():
+    print('Interactive mode is active. Press Enter to accept the default for each choice.')
+    port = _get_port_interactively()
+    # Ask for y/n but also strip extra space
+    quiet = input(f'Quiet mode (suppresses console output)? (Y/[N], default N): ').lower().strip() or 'n'
+    # and also accept "yes" or really yXX by truncating string
+    quiet = (quiet[0] == 'y')
+    outfile = input('Path of file to output current playing song to (no file output by default): ').strip()
+    _args = []
+
+    if port:
+        _args.extend(['--port', port])
+    if quiet:
+        _args.extend(['--quiet'])
+    if outfile:
+        _args.extend(['--outfile', outfile])
+
+    print(f"{parser.prog} {' '.join(_args)}")
+
+    return _args
 
 def want_interactive():
-    answer = input(' '.join([
-        'Type the letter i (then press Enter) to set options',
-        'interactively or press Enter to continue with default options: '
-    ]))
-    return answer.lower().strip() == 'i'
+    while True:
+        answer = input(' '.join([
+            'Type the letter i (then press Enter) to set options',
+            'interactively or press h (then press Enter) for help, '
+            'or just press Enter to continue with default options: '
+        ])).lower().strip()
 
-def main():
+        if answer == 'h':
+            parser.print_help()
+            print('\n')
+            continue
+
+        return answer == 'i'
+
+def main(args):
     # set arguments interactively if interactive flag is passed
     # or if the user passes no arguments and desires interactive mode
     if args.interactive or (len(sys.argv) == 1 and want_interactive()):
-        interactive()
+        args = parser.parse_args(interactive())
 
     listener = Listener(port=args.port, quiet=args.quiet, outfile=args.outfile)
     listener.start()
 
 if __name__ == '__main__':
-    main()
+    main(args)

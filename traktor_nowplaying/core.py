@@ -74,6 +74,8 @@ class Listener():
 
         if not self.quiet:
             print(f'Listening on port {self.port}.')
+            if self.outfile:
+                print(f'Outputting to {self.outfile}')
             callbacks.append(_output_to_console)
 
         if self.outfile:
