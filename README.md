@@ -14,7 +14,7 @@ The preferred installation method is via [pip](https://pip.pypa.io/en/stable/):
 pip install traktor_nowplaying
 ```
 
-Eventually, I'd like to leverage GitHub actions to automate the creation of binary releases using `pyInstaller` or something similar, but this is not setup at the moment.
+There are also binary releases available for Windows, Linux, and MacOS. These are created using `pyInstaller` and GitHub actions and can be downloaded from [the project Releases page](https://github.com/radusuciu/traktor_nowplaying/releases).
 
 ## General use
 
@@ -26,7 +26,7 @@ Note that there is a delay between when you change a song in Traktor and when th
 
 ## Use from command line
 
-Default options: listen on port `8000`, and output the currently playing song to the console:
+If you run the program without specifying any options you'll be asked if you want to set the options interactively, or you can hit enter which uses all default options, which are to listen on port `8000`, and output the currently playing song to the console:
 ```bash
 traktor_nowplaying
 ```
@@ -63,6 +63,10 @@ the sample rate of your system, so most commonly the best choice is 44100 Hz,
 ```
 
 To stop the process `Ctrl + C` should suffice.
+
+## Using binary releases
+
+If you've downloded a platform specific release from [the Releases page](https://github.com/radusuciu/traktor_nowplaying/releases), the use instructions are the same as described above for the command-line.
 
 ## Use as a library
 
