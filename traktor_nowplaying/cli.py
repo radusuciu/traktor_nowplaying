@@ -44,12 +44,10 @@ parser.add_argument('-v', '--version',
     version='%(prog)s {version}'.format(version=__version__)
 )
 
-args = parser.parse_args()
 
 def _exit(status=None):
-    if not args.quiet:
-        print('\n Exiting')
-        sys.exit(status)
+    print('\n Exiting')
+    sys.exit(status)
 
 # capture Ctrl + C
 signal.signal(signal.SIGINT, lambda signum, frame: _exit())
@@ -117,7 +115,8 @@ def want_interactive():
 
         return answer == 'i'
 
-def main(args):
+def main():
+    args = parser.parse_args()
     # set arguments interactively if interactive flag is passed
     # or if the user passes no arguments and desires interactive mode
     if args.interactive or (len(sys.argv) == 1 and want_interactive()):
@@ -127,4 +126,4 @@ def main(args):
     listener.start()
 
 if __name__ == '__main__':
-    main(args)
+    main()
