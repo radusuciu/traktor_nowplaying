@@ -79,11 +79,7 @@ listener = Listener(port=8000, quiet=True, outfile='nowplaying.txt')
 listener.start()
 ```
 
-A more elaborate example with a custom callback:
-
-```python
-# TODO: add example implementation
-```
+For a more elaborate example with a custom callback, see this project: https://github.com/radusuciu/traktor_ice, and [this bit](https://github.com/radusuciu/traktor_ice/blob/b0873cb5e36dbcb87a260900f44a2f1768d5d5c9/traktor_ice/core.py#L60-L74) in particular.
 
 
 ## Implementation details
