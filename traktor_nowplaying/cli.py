@@ -107,15 +107,15 @@ def interactive():
     if outfile:
         _args.extend(['--outfile', outfile])
 
-        append = input('Append latest track to end of file? (Y/[N], default N)').lower().strip() or 'n'
+        append = input('Append latest track to end of file? (Y/[N], default N): ').lower().strip() or 'n'
         # and also accept "yes" or really yXX by truncating string
         append = (append[0] == 'y')
         if append:
             _args.extend(['--append'])
         
             try:
-                max_tracks = int(input('Number of tracks to keep in file (default no limit):'))
-                if max_tracks > 0:
+                max_tracks = input('Number of tracks to keep in file (default no limit): ')
+                if int(max_tracks) > 0:
                     _args.extend(['--max-tracks', max_tracks])
             except ValueError:
                 pass
