@@ -35,7 +35,7 @@ parser.add_argument('-o', '--outfile', default=None,
 )
 
 parser.add_argument('-a', '--append', default=APPEND,
-    actio='store_true',
+    action='store_true',
     help='If writing to file, appends newest track to end of file instead of overwriting the file'
 )
 
