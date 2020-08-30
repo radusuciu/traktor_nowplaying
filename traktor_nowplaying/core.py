@@ -55,17 +55,20 @@ def _output_to_console(data):
     if track_string:
         print(track_string)
 
-def _output_to_file(data, outfile):
-    with open(outfile, 'w') as f:
+def _output_to_file(data, outfile, append=False):
+    mode = 'a' if append else 'w'
+
+    with open(outfile, mode) as f:
         f.write(f'{_get_track_string(data)}\n')
 
 class Listener():
     """Listens to Traktor broadcast, given a port."""
 
-    def __init__(self, port=PORT, quiet=QUIET, outfile=None, custom_callback=None):
+    def __init__(self, port=PORT, quiet=QUIET, outfile=None, append=False, custom_callback=None):
         self.port = port
         self.quiet = quiet
         self.outfile = outfile
+        self.append = append
         self.custom_callback = custom_callback
 
     def _create_outfile(self):
@@ -93,7 +96,9 @@ class Listener():
         if self.outfile:
             try:
                 self._create_outfile()
-                callbacks.append(functools.partial(_output_to_file, outfile=self.outfile))
+                callbacks.append(functools.partial(
+                    _output_to_file, outfile=self.outfile, append=self.append
+                ))
             except:
                 print(f'Error encountered while trying to write to {self.outfile}.')
                 return

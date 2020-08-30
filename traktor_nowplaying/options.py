@@ -1,3 +1,4 @@
 PORT = 8000
 QUIET = False
 INTERACTIVE = False
+APPEND = False

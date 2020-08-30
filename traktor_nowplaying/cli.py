@@ -3,7 +3,7 @@ Contains a command-line interface implemented with argparse.
 """
 
 from traktor_nowplaying.core import Listener
-from traktor_nowplaying.options import PORT, QUIET, INTERACTIVE
+from traktor_nowplaying.options import PORT, QUIET, INTERACTIVE, APPEND
 from traktor_nowplaying.version import __version__
 import argparse
 import signal
@@ -32,6 +32,11 @@ parser.add_argument('-q', '--quiet', default=QUIET,
 
 parser.add_argument('-o', '--outfile', default=None,
     help='Provide a file path to which the currently playing song should be written',
+)
+
+parser.add_argument('-a', '--append', default=APPEND,
+    actio='store_true',
+    help='If writing to file, appends newest track to end of file instead of overwriting the file'
 )
 
 parser.add_argument('-i', '--interactive', default=INTERACTIVE,
