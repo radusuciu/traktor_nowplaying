@@ -100,6 +100,11 @@ def interactive():
         _args.extend(['--quiet'])
     if outfile:
         _args.extend(['--outfile', outfile])
+        append = input('Append latest track to end of file? (Y/[N], default N)').lower().strip() or 'n'
+        # and also accept "yes" or really yXX by truncating string
+        append = (append[0] == 'y')
+        if append:
+            _args.extend(['--append'])
 
     print(f"{parser.prog} {' '.join(_args)}")
 
