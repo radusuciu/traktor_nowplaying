@@ -39,7 +39,8 @@ traktor_nowplaying --port 8000 --outfile='nowplaying.txt' --quiet
 The help text:
 ```bash
 $ traktor_nowplaying -h
-usage: traktor_nowplaying [-h] [-p PORT] [-q] [-o OUTFILE] [-i] [-v]
+usage: traktor_nowplaying [-h] [-p PORT] [-q] [-o OUTFILE] [-a]
+                          [-m MAX_TRACKS] [-i] [-v]
 
 Use Traktor's broadcast functionality to extract metadata about the currently
 playing song
@@ -51,6 +52,11 @@ optional arguments:
   -o OUTFILE, --outfile OUTFILE
                         Provide a file path to which the currently playing
                         song should be written
+  -a, --append          If writing to file, appends newest track to end of
+                        file instead of overwriting the file
+  -m MAX_TRACKS, --max-tracks MAX_TRACKS
+                        If appending to a file, the maximum number of tracks
+                        to keep in file (by default there is no limit)
   -i, --interactive     Interactive mode allows for settings to be specified
                         at runtime. These override command line options.
   -v, --version         show program's version number and exit
