@@ -2,3 +2,4 @@ PORT = 8000
 QUIET = False
 INTERACTIVE = False
 APPEND = False
+MAX_TRACKS = -1

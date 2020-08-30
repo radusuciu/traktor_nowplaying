@@ -3,7 +3,7 @@ Contains a command-line interface implemented with argparse.
 """
 
 from traktor_nowplaying.core import Listener
-from traktor_nowplaying.options import PORT, QUIET, INTERACTIVE, APPEND
+from traktor_nowplaying.options import PORT, QUIET, INTERACTIVE, APPEND, MAX_TRACKS
 from traktor_nowplaying.version import __version__
 import argparse
 import signal
@@ -37,6 +37,12 @@ parser.add_argument('-o', '--outfile', default=None,
 parser.add_argument('-a', '--append', default=APPEND,
     action='store_true',
     help='If writing to file, appends newest track to end of file instead of overwriting the file'
+)
+
+parser.add_argument('-m', '--max-tracks', default=MAX_TRACKS,
+    action='store',
+    type=int,
+    help='If appending to a file, the maximum number of tracks to keep in file (by default there is no limit)'
 )
 
 parser.add_argument('-i', '--interactive', default=INTERACTIVE,
@@ -100,11 +106,19 @@ def interactive():
         _args.extend(['--quiet'])
     if outfile:
         _args.extend(['--outfile', outfile])
+
         append = input('Append latest track to end of file? (Y/[N], default N)').lower().strip() or 'n'
         # and also accept "yes" or really yXX by truncating string
         append = (append[0] == 'y')
         if append:
             _args.extend(['--append'])
+        
+            try:
+                max_tracks = int(input('Number of tracks to keep in file (default no limit):'))
+                if max_tracks > 0:
+                    _args.extend(['--max-tracks', max_tracks])
+            except ValueError:
+                pass
 
     print(f"{parser.prog} {' '.join(_args)}")
 
@@ -132,7 +146,7 @@ def main():
     if args.interactive or (len(sys.argv) == 1 and want_interactive()):
         args = parser.parse_args(interactive())
 
-    listener = Listener(port=args.port, quiet=args.quiet, outfile=args.outfile, append=args.append)
+    listener = Listener(port=args.port, quiet=args.quiet, outfile=args.outfile, append=args.append, max_tracks=args.max_tracks)
     listener.start()
 
 if __name__ == '__main__':

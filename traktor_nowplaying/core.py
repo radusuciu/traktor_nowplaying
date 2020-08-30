@@ -1,4 +1,4 @@
-from .options import PORT, QUIET
+from .options import PORT, QUIET, MAX_TRACKS, APPEND
 from .ogg import parse_comment, parse_pages
 import functools
 import http.server
@@ -55,20 +55,33 @@ def _output_to_console(data):
     if track_string:
         print(track_string)
 
-def _output_to_file(data, outfile, append=False):
-    mode = 'a' if append else 'w'
+def _output_to_file(data, outfile, append=False, max_tracks=-1):
+    mode = 'a' if (append and max_tracks < 0)  else 'w'
+
+    current_track_string = _get_track_string(data)
+    tracks_to_output = [current_track_string]
+
+    if max_tracks > 1:
+        with open(outfile, 'r') as f:
+            existing_tracks = f.read().splitlines()
+
+        tracks_to_output = [
+            *existing_tracks[-(max_tracks - 1):],
+            current_track_string
+        ]
 
     with open(outfile, mode) as f:
-        f.write(f'{_get_track_string(data)}\n')
+        f.write('\n'.join(tracks_to_output))
 
 class Listener():
     """Listens to Traktor broadcast, given a port."""
 
-    def __init__(self, port=PORT, quiet=QUIET, outfile=None, append=False, custom_callback=None):
+    def __init__(self, port=PORT, quiet=QUIET, outfile=None, append=APPEND, max_tracks=MAX_TRACKS, custom_callback=None):
         self.port = port
         self.quiet = quiet
         self.outfile = outfile
         self.append = append
+        self.max_tracks = max_tracks
         self.custom_callback = custom_callback
 
     def _create_outfile(self):
@@ -97,7 +110,7 @@ class Listener():
             try:
                 self._create_outfile()
                 callbacks.append(functools.partial(
-                    _output_to_file, outfile=self.outfile, append=self.append
+                    _output_to_file, outfile=self.outfile, append=self.append, max_tracks=self.max_tracks
                 ))
             except:
                 print(f'Error encountered while trying to write to {self.outfile}.')
