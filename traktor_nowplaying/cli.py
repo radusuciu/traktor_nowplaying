@@ -127,7 +127,7 @@ def main():
     if args.interactive or (len(sys.argv) == 1 and want_interactive()):
         args = parser.parse_args(interactive())
 
-    listener = Listener(port=args.port, quiet=args.quiet, outfile=args.outfile)
+    listener = Listener(port=args.port, quiet=args.quiet, outfile=args.outfile, append=args.append)
     listener.start()
 
 if __name__ == '__main__':
