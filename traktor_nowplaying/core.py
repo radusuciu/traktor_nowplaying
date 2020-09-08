@@ -1,5 +1,6 @@
 from .options import PORT, QUIET, OUTPUT_FORMAT, APPEND, MAX_TRACKS
 from .ogg import parse_comment, parse_pages
+from bottle import template
 from collections import deque
 import functools
 import http.server
@@ -78,7 +79,7 @@ class TrackWriter:
             self._to_file()
 
     def _get_track_string(self, info):
-        return self.output_format.format(
+        return template(self.output_format,
             artist=info.get('artist', ''),
             title=info.get('title', '')
         )
