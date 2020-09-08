@@ -61,14 +61,15 @@ class TrackWriter:
             self.output_format = SimpleTemplate(output_format)
         except TemplateError:
             print('Error encountered while trying to parse output format.')
-            self.output_format = OUTPUT_FORMAT
+            self.output_format = SimpleTemplate(OUTPUT_FORMAT)
 
+        self.template = None
+    
         if template is not None:
             try:
                 self.template = SimpleTemplate(template)
             except TemplateError:
                 print('Error encountered while trying to parse template.')
-                self.template = None
 
         if self.outfile:
             try:
