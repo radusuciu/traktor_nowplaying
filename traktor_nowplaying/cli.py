@@ -3,7 +3,7 @@ Contains a command-line interface implemented with argparse.
 """
 
 from traktor_nowplaying.core import Listener
-from traktor_nowplaying.options import PORT, QUIET, USE_DEFAULT_HTML_TEMPLATE, HTML_TEMPLATE, OUTPUT_FORMAT, INTERACTIVE, APPEND, MAX_TRACKS
+from traktor_nowplaying.options import PORT, QUIET, OUTPUT_FORMAT, INTERACTIVE, APPEND, MAX_TRACKS
 from traktor_nowplaying.version import __version__
 import argparse
 import signal
@@ -40,11 +40,6 @@ parser.add_argument('-o', '--outfile', default=None,
 
 parser.add_argument('-t', '--template', default=None,
     help='Template file to use for output. Templating is implemented using Bottle SimpleTemplate (https://bottlepy.org/docs/0.12/stpl.html). See README for more details on use. Note: the --format options is ignored when using a custom template file. Take care when using templates provided by others on the internet as they can contain malicious code.'
-)
-
-parser.add_argument('--use-default-html-template', default=USE_DEFAULT_HTML_TEMPLATE,
-    action='store_true',
-    help='Use default HTML template'
 )
 
 parser.add_argument('-a', '--append', default=APPEND,
@@ -168,9 +163,7 @@ def main():
     if args.interactive or (len(sys.argv) == 1 and want_interactive()):
         args = parser.parse_args(interactive())
 
-    if args.use_default_html_template:
-        template = HTML_TEMPLATE
-    elif args.template:
+    if args.template:
         template = _read_template_file(args.template)
 
     listener = Listener(
