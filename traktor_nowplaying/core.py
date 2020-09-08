@@ -1,5 +1,6 @@
 from .options import PORT, QUIET, OUTPUT_FORMAT, APPEND, MAX_TRACKS
 from .ogg import parse_comment, parse_pages
+from collections import deque
 import functools
 import http.server
 import socketserver
@@ -54,6 +55,7 @@ class TrackWriter:
         self.outfile = outfile
         self.append = append
         self.max_tracks = max_tracks
+        self.tracks = deque(maxlen=self.max_tracks)
 
         if self.outfile:
             try:
@@ -62,26 +64,26 @@ class TrackWriter:
                 print(f'Error encountered while trying to write to {self.outfile}.')
 
     def update(self, data):
-        if not self.quiet:
-            self._to_stdout(data)
-        if self.outfile:
-            self._to_file(data)
-
-    def _get_track_string(self, data):
         info = dict(data)
 
         if not ('artist' in info or 'title' in info):
-            return ''
+            return
 
-        track_string = self.output_format.format(
+        self.tracks.append(info)
+
+        if not self.quiet:
+            self._to_stdout()
+        if self.outfile:
+            self._to_file()
+
+    def _get_track_string(self, info):
+        return self.output_format.format(
             artist=info.get('artist', ''),
             title=info.get('title', '')
         )
 
-        return track_string
-
-    def _to_stdout(self, data):
-        track_string = self._get_track_string(data)
+    def _to_stdout(self):
+        track_string = self._get_track_string(self.tracks[-1])
         if track_string:
             print(track_string)
 
@@ -94,23 +96,14 @@ class TrackWriter:
             print(f'{self.outfile} is a directory!')
             raise IsADirectoryError
 
-    def _to_file(self, data):
+    def _to_file(self):
         mode = 'a' if (self.append and self.max_tracks < 0)  else 'w'
 
-        current_track_string = self._get_track_string(data)
-        tracks_to_output = [current_track_string]
+        tracklist = '\n'.join(self._get_track_string(t) for t in self.tracks)
 
-        if self.max_tracks > 1:
-            with open(self.outfile, 'r') as f:
-                existing_tracks = f.read().splitlines()
 
-            tracks_to_output = [
-                *existing_tracks[-(self.max_tracks - 1):],
-                current_track_string
-            ]
-
-        with open(self.outfile, mode) as f:
-            f.write('\n'.join(tracks_to_output))
+        with open(self.outfile, 'w') as f:
+            f.write(tracklist)
 
 
 class Listener():
