@@ -38,7 +38,7 @@ parser.add_argument('-o', '--outfile', default=None,
     help='Provide a file path to which the currently playing song should be written',
 )
 
-parser.add_argument('-t', '--template-file', default=None,
+parser.add_argument('-t', '--template', default=None,
     help='Template file to use for output. Templating is implemented using Bottle SimpleTemplate (https://bottlepy.org/docs/0.12/stpl.html). See README for more details on use. Note: the --format options is ignored when using a custom template file. Take care when using templates provided by others on the internet as they can contain malicious code.'
 )
 
@@ -170,8 +170,8 @@ def main():
 
     if args.use_default_html_template:
         template = HTML_TEMPLATE
-    elif args.template_file:
-        template = _read_template_file(args.template_file)
+    elif args.template:
+        template = _read_template_file(args.template)
 
     listener = Listener(
         port=args.port,
