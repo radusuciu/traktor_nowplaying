@@ -1,6 +1,6 @@
 from .options import PORT, QUIET, OUTPUT_FORMAT, APPEND, MAX_TRACKS
 from .ogg import parse_comment, parse_pages
-from bottle import template
+from bottle import SimpleTemplate, TemplateError
 from collections import deque
 import functools
 import http.server
@@ -52,12 +52,23 @@ class TrackWriter:
     """Writes tracks to standard output and/or file."""
     def __init__(self, quiet=QUIET, output_format=OUTPUT_FORMAT, outfile=None, template=None, append=APPEND, max_tracks=MAX_TRACKS):
         self.quiet = quiet
-        self.output_format = output_format
         self.outfile = outfile
-        self.template = template
         self.append = append
         self.max_tracks = max_tracks
         self.tracks = deque(maxlen=self.max_tracks)
+
+        try:
+            self.output_format = SimpleTemplate(output_format)
+        except TemplateError:
+            print('Error encountered while trying to parse output format.')
+            self.output_format = OUTPUT_FORMAT
+
+        if template is not None:
+            try:
+                self.template = SimpleTemplate(template)
+            except TemplateError:
+                print('Error encountered while trying to parse template.')
+                self.template = None
 
         if self.outfile:
             try:
@@ -79,7 +90,7 @@ class TrackWriter:
             self._to_file()
 
     def _get_track_string(self, info):
-        return template(self.output_format,
+        return self.output_format.render(
             artist=info.get('artist', ''),
             title=info.get('title', '')
         )
@@ -102,7 +113,7 @@ class TrackWriter:
         mode = 'a' if (self.append and self.max_tracks < 0)  else 'w'
 
         if self.template:
-            tracklist = template(self.template, tracks=self.tracks)
+            tracklist = self.template.render(tracks=self.tracks)
         else:
             tracklist = '\n'.join(self._get_track_string(t) for t in self.tracks)
 
