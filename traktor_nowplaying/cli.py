@@ -3,7 +3,7 @@ Contains a command-line interface implemented with argparse.
 """
 
 from traktor_nowplaying.core import Listener
-from traktor_nowplaying.options import PORT, QUIET, OUTPUT_FORMAT, INTERACTIVE, APPEND, MAX_TRACKS
+from traktor_nowplaying.options import PORT, QUIET, USE_DEFAULT_HTML_TEMPLATE, HTML_TEMPLATE, OUTPUT_FORMAT, INTERACTIVE, APPEND, MAX_TRACKS
 from traktor_nowplaying.version import __version__
 import argparse
 import signal
@@ -36,6 +36,15 @@ parser.add_argument('-f', '--format', default=OUTPUT_FORMAT,
 
 parser.add_argument('-o', '--outfile', default=None,
     help='Provide a file path to which the currently playing song should be written',
+)
+
+parser.add_argument('-t', '--template-file', default=None,
+    help='Template file to use for output. Make sure to have {tracklist} where you want the track list to go.'
+)
+
+parser.add_argument('--use-default-html-template', default=USE_DEFAULT_HTML_TEMPLATE,
+    action='store_true',
+    help='Use default HTML template'
 )
 
 parser.add_argument('-a', '--append', default=APPEND,
@@ -143,6 +152,15 @@ def want_interactive():
 
         return answer == 'i'
 
+def _read_template_file(path):
+    try:
+        with open(path, 'r') as f:
+            return f.read()
+    except:
+        print(f'Error encountered while trying to read template file ({path}).')
+
+    return
+
 def main():
     args = parser.parse_args()
     # set arguments interactively if interactive flag is passed
@@ -150,11 +168,17 @@ def main():
     if args.interactive or (len(sys.argv) == 1 and want_interactive()):
         args = parser.parse_args(interactive())
 
+    if args.use_default_html_template:
+        template = HTML_TEMPLATE
+    elif args.template_file:
+        template = _read_template_file(args.template_file)
+
     listener = Listener(
         port=args.port,
         quiet=args.quiet,
         output_format=args.format,
         outfile=args.outfile,
+        template=template,
         append=args.append,
         max_tracks=args.max_tracks
     )

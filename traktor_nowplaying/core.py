@@ -49,10 +49,11 @@ def create_request_handler(callbacks):
 
 class TrackWriter:
     """Writes tracks to standard output and/or file."""
-    def __init__(self, quiet=QUIET, output_format=OUTPUT_FORMAT, outfile=None, append=APPEND, max_tracks=MAX_TRACKS):
+    def __init__(self, quiet=QUIET, output_format=OUTPUT_FORMAT, outfile=None, template=None, append=APPEND, max_tracks=MAX_TRACKS):
         self.quiet = quiet
         self.output_format = output_format
         self.outfile = outfile
+        self.template = template
         self.append = append
         self.max_tracks = max_tracks
         self.tracks = deque(maxlen=self.max_tracks)
@@ -101,6 +102,8 @@ class TrackWriter:
 
         tracklist = '\n'.join(self._get_track_string(t) for t in self.tracks)
 
+        if self.template:
+            tracklist = self.template.format(tracklist=tracklist)
 
         with open(self.outfile, 'w') as f:
             f.write(tracklist)
@@ -109,11 +112,12 @@ class TrackWriter:
 class Listener():
     """Listens to Traktor broadcast, given a port."""
 
-    def __init__(self, port=PORT, quiet=QUIET, output_format=OUTPUT_FORMAT, outfile=None, append=APPEND, max_tracks=MAX_TRACKS, custom_callback=None):
+    def __init__(self, port=PORT, quiet=QUIET, output_format=OUTPUT_FORMAT, outfile=None, template=None, append=APPEND, max_tracks=MAX_TRACKS, custom_callback=None):
         self.port = port
         self.quiet = quiet
         self.output_format = output_format
         self.outfile = outfile
+        self.template = template
         self.append = append
         self.max_tracks = max_tracks
         self.custom_callback = custom_callback
@@ -128,6 +132,7 @@ class Listener():
                 quiet=self.quiet,
                 output_format=self.output_format,
                 outfile=self.outfile,
+                template=self.template,
                 append=self.append,
                 max_tracks=self.max_tracks
             )
