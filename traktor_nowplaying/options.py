@@ -16,4 +16,4 @@ HTML_TEMPLATE = '''<!DOCTYPE html>
 '''
 INTERACTIVE = False
 APPEND = False
-MAX_TRACKS = -1
+MAX_TRACKS = None

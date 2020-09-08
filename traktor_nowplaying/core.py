@@ -54,7 +54,8 @@ class TrackWriter:
         self.quiet = quiet
         self.outfile = outfile
         self.append = append
-        self.max_tracks = max_tracks
+
+        self.max_tracks = max_tracks if append else 1
         self.tracks = deque(maxlen=self.max_tracks)
 
         try:
