@@ -101,10 +101,10 @@ class TrackWriter:
     def _to_file(self):
         mode = 'a' if (self.append and self.max_tracks < 0)  else 'w'
 
-        tracklist = '\n'.join(self._get_track_string(t) for t in self.tracks)
-
         if self.template:
-            tracklist = self.template.format(tracklist=tracklist)
+            tracklist = template(self.template, tracks=self.tracks)
+        else:
+            tracklist = '\n'.join(self._get_track_string(t) for t in self.tracks)
 
         with open(self.outfile, 'w') as f:
             f.write(tracklist)

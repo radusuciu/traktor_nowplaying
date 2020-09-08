@@ -5,7 +5,9 @@ USE_DEFAULT_HTML_TEMPLATE = False
 HTML_TEMPLATE = '''<!DOCTYPE html>
 <html>
     <body>
-        {tracklist}
+        % for track in tracks:
+        <p>{{track.get('artist', '')}} - {{track.get('title')}}</p>
+        % end
     </body>
 </html>
 '''

@@ -39,7 +39,7 @@ parser.add_argument('-o', '--outfile', default=None,
 )
 
 parser.add_argument('-t', '--template-file', default=None,
-    help='Template file to use for output. Make sure to have {tracklist} where you want the track list to go.'
+    help='Template file to use for output. Templating is implemented using Bottle SimpleTemplate (https://bottlepy.org/docs/0.12/stpl.html). See README for more details on use. Note: the --format options is ignored when using a template file. Take care when using templates provided by others on the internet as they can contain malicious code.'
 )
 
 parser.add_argument('--use-default-html-template', default=USE_DEFAULT_HTML_TEMPLATE,
