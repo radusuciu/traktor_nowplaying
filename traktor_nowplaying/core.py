@@ -1,4 +1,4 @@
-from .options import PORT, QUIET, MAX_TRACKS, APPEND
+from .options import PORT, QUIET, OUTPUT_FORMAT, APPEND, MAX_TRACKS
 from .ogg import parse_comment, parse_pages
 import functools
 import http.server
@@ -48,8 +48,9 @@ def create_request_handler(callbacks):
 
 class TrackWriter:
     """Writes tracks to standard output and/or file."""
-    def __init__(self, quiet=QUIET, outfile=None, append=APPEND, max_tracks=MAX_TRACKS):
+    def __init__(self, quiet=QUIET, output_format=OUTPUT_FORMAT, outfile=None, append=APPEND, max_tracks=MAX_TRACKS):
         self.quiet = quiet
+        self.output_format = output_format
         self.outfile = outfile
         self.append = append
         self.max_tracks = max_tracks
@@ -68,8 +69,16 @@ class TrackWriter:
 
     def _get_track_string(self, data):
         info = dict(data)
-        track_string = f'{info.get("artist", "")} - {info.get("title", "")}'
-        return track_string if len(track_string) > 3 else ''
+
+        if not ('artist' in info or 'title' in info):
+            return ''
+
+        track_string = self.output_format.format(
+            artist=info.get('artist', ''),
+            title=info.get('title', '')
+        )
+
+        return track_string
 
     def _to_stdout(self, data):
         track_string = self._get_track_string(data)
@@ -107,9 +116,10 @@ class TrackWriter:
 class Listener():
     """Listens to Traktor broadcast, given a port."""
 
-    def __init__(self, port=PORT, quiet=QUIET, outfile=None, append=APPEND, max_tracks=MAX_TRACKS, custom_callback=None):
+    def __init__(self, port=PORT, quiet=QUIET, output_format=OUTPUT_FORMAT, outfile=None, append=APPEND, max_tracks=MAX_TRACKS, custom_callback=None):
         self.port = port
         self.quiet = quiet
+        self.output_format = output_format
         self.outfile = outfile
         self.append = append
         self.max_tracks = max_tracks
@@ -121,7 +131,13 @@ class Listener():
         callbacks = []
 
         if self.outfile is not None or not self.quiet:
-            writer = TrackWriter(self.quiet, self.outfile, self.append, self.max_tracks)
+            writer = TrackWriter(
+                quiet=self.quiet,
+                output_format=self.output_format,
+                outfile=self.outfile,
+                append=self.append,
+                max_tracks=self.max_tracks
+            )
             callbacks.append(writer.update)
 
         if not self.quiet:

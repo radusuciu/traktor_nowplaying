@@ -3,7 +3,7 @@ Contains a command-line interface implemented with argparse.
 """
 
 from traktor_nowplaying.core import Listener
-from traktor_nowplaying.options import PORT, QUIET, INTERACTIVE, APPEND, MAX_TRACKS
+from traktor_nowplaying.options import PORT, QUIET, OUTPUT_FORMAT, INTERACTIVE, APPEND, MAX_TRACKS
 from traktor_nowplaying.version import __version__
 import argparse
 import signal
@@ -28,6 +28,10 @@ parser.add_argument('-p', '--port', default=PORT,
 parser.add_argument('-q', '--quiet', default=QUIET,
     action='store_true',
     help='Suppress console output of currently playing song'
+)
+
+parser.add_argument('-f', '--format', default=OUTPUT_FORMAT,
+    help='Custom format to use when outputting tracks'
 )
 
 parser.add_argument('-o', '--outfile', default=None,
@@ -146,7 +150,14 @@ def main():
     if args.interactive or (len(sys.argv) == 1 and want_interactive()):
         args = parser.parse_args(interactive())
 
-    listener = Listener(port=args.port, quiet=args.quiet, outfile=args.outfile, append=args.append, max_tracks=args.max_tracks)
+    listener = Listener(
+        port=args.port,
+        quiet=args.quiet,
+        output_format=args.format,
+        outfile=args.outfile,
+        append=args.append,
+        max_tracks=args.max_tracks
+    )
     listener.start()
 
 if __name__ == '__main__':
