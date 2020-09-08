@@ -111,8 +111,6 @@ class TrackWriter:
             raise IsADirectoryError
 
     def _to_file(self):
-        mode = 'a' if (self.append and self.max_tracks < 0)  else 'w'
-
         if self.template:
             tracklist = self.template.render(tracks=self.tracks)
         else:
