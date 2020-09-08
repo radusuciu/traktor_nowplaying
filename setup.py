@@ -82,7 +82,7 @@ setup(
         'Topic :: Multimedia :: Sound/Audio',
         'Intended Audience :: End Users/Desktop',
         'Programming Language :: Python :: 3',
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Natural Language :: English',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
