@@ -69,6 +69,7 @@ setup(
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
+    python_requires='>=3.6.2',
     packages=find_packages(exclude=('tests',)),
     entry_points={
         'console_scripts': ['traktor_nowplaying=traktor_nowplaying.cli:main']
