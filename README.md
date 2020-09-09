@@ -37,11 +37,13 @@ traktor_nowplaying --port 8000 --outfile='nowplaying.txt' --quiet
 ```
 
 The help text:
-```bash
+```
 $ traktor_nowplaying --help
-usage: traktor_nowplaying [-h] [-p PORT] [-q] [-f FORMAT] [-o OUTFILE] [-t TEMPLATE] [-a] [-m MAX_TRACKS] [-i] [-v]
+usage: traktor_nowplaying [-h] [-p PORT] [-q] [-f FORMAT] [-o OUTFILE]
+                          [-t TEMPLATE] [-a] [-m MAX_TRACKS] [-i] [-v]
 
-Use Traktor's broadcast functionality to extract metadata about the currently playing song
+Use Traktor's broadcast functionality to extract metadata about the currently
+playing song
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -50,23 +52,30 @@ optional arguments:
   -f FORMAT, --format FORMAT
                         Custom format to use when outputting tracks
   -o OUTFILE, --outfile OUTFILE
-                        Provide a file path to which the currently playing song should be written
+                        Provide a file path to which the currently playing song
+                        should be written
   -t TEMPLATE, --template TEMPLATE
-                        Template file to use for output. Templating is implemented using Bottle SimpleTemplate
-                        (https://bottlepy.org/docs/0.12/stpl.html). See README for more details on use. Note: the
-                        --format options is ignored when using a custom template file. Take care when using templates
-                        provided by others on the internet as they can contain malicious code.
-  -a, --append          If writing to file, appends newest track to end of file instead of overwriting the file
+                        Template file to use for output. Templating is
+                        implemented using Bottle SimpleTemplate
+                        (https://bottlepy.org/docs/0.12/stpl.html). See README
+                        for more details on use. Note: the --format options is
+                        ignored when using a custom template file. Take care
+                        when using templates provided by others on the internet
+                        as they can contain malicious code.
+  -a, --append          If writing to file, appends newest track to end of file
+                        instead of overwriting the file
   -m MAX_TRACKS, --max-tracks MAX_TRACKS
-                        If appending to a file, the maximum number of tracks to keep in file (by default there is no
-                        limit)
-  -i, --interactive     Interactive mode allows for settings to be specified at runtime. These override command line
-                        options.
+                        If appending to a file, the maximum number of tracks to
+                        keep in file (by default there is no limit)
+  -i, --interactive     Interactive mode allows for settings to be specified at
+                        runtime. These override command line options.
   -v, --version         show program's version number and exit
 
-Note that you must configure Traktor to broadcast to localhost and the port specified with the -p, or --port option
-(defaults to 8000). For the format setting you can use anything, but I recommend choosing the lowest bitrate for the
-sample rate of your system, so most commonly the best choice is 44100 Hz, 64 Kbps.
+Note that you must configure Traktor to broadcast to localhost and the port
+specified with the -p, or --port option (defaults to 8000). For the format
+setting you can use anything, but I recommend choosing the lowest bitrate for
+the sample rate of your system, so most commonly the best choice is 44100 Hz,
+64 Kbps.
 ```
 
 To stop the process `Ctrl + C` should suffice.
@@ -110,7 +119,7 @@ While `--format` allows you to control the display of each individual track, `--
     </head>
     <body>
         % for track in tracks:
-        <p><strong>{{track.get('artist', '')}}</strong> - {{track.get('title')}}</p>
+        <p><strong>{{track.get('artist', '')}}</strong> - {{track.get('title', '')}}</p>
         % end
     </body>
 </html>
