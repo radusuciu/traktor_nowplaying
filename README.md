@@ -1,6 +1,10 @@
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/traktor-nowplaying.svg)](https://pypi.python.org/pypi/traktor-nowplaying/)
+[![PyPI version fury.io](https://img.shields.io/pypi/v/traktor-nowplaying.svg)](https://pypi.python.org/pypi/traktor-nowplaying/)
+[![GitHub release](https://img.shields.io/github/release/radusuciu/traktor_nowplaying.svg)](https://github.com/radusuciu/traktor_nowplaying/releases/)
+
 # Traktor Now Playing
 
-This project for Python 3 (tested on 3.7 and 3.8) uses Traktor's broadcast functionality to extract metadata about the currently playing song. This is really a very thin wrapper around some [tinytag](https://github.com/devsnd/tinytag) methods that can be found in `ogg.py`, where the original license is also included. There are no dependencies. Tested with Traktor 3.3, but this will likely work with older versions as well.
+This project for Python 3 (tested on 3.6+) uses Traktor's broadcast functionality to extract metadata about the currently playing song. This is really a very thin wrapper around some [tinytag](https://github.com/devsnd/tinytag) methods that can be found in `ogg.py`, where the original license is also included. There are no dependencies. Tested with Traktor 3.3, but this will likely work with older versions as well.
 
 The reason this exists is because it's rather difficult to get this information through other means. You can [use MIDI](https://github.com/Sonnenstrahl/traktor-now-playing) for this as well, but that requires that you add a fake controller.
 
