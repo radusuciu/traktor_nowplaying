@@ -163,8 +163,7 @@ def main():
     if args.interactive or (len(sys.argv) == 1 and want_interactive()):
         args = parser.parse_args(interactive())
 
-    if args.template:
-        template = _read_template_file(args.template)
+    template = _read_template_file(args.template) if args.template else None
 
     listener = Listener(
         port=args.port,
