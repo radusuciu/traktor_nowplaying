@@ -4,6 +4,7 @@ from .bottle import SimpleTemplate, TemplateError
 from collections import deque
 import functools
 import http.server
+import html
 import socketserver
 import pathlib
 import types
@@ -92,10 +93,10 @@ class TrackWriter:
             self._to_file()
 
     def _get_track_string(self, info):
-        return self.output_format.render(
+        return html.unescape(self.output_format.render(
             artist=info.get('artist', ''),
             title=info.get('title', '')
-        )
+        ))
 
     def _to_stdout(self):
         track_string = self._get_track_string(self.tracks[-1])
