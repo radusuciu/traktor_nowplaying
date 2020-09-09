@@ -1,6 +1,6 @@
 from .options import PORT, QUIET, OUTPUT_FORMAT, APPEND, MAX_TRACKS
 from .ogg import parse_comment, parse_pages
-from bottle import SimpleTemplate, TemplateError
+from .bottle import SimpleTemplate, TemplateError
 from collections import deque
 import functools
 import http.server
