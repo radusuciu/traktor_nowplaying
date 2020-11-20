@@ -118,7 +118,7 @@ class TrackWriter:
         else:
             tracklist = '\n'.join(self._get_track_string(t) for t in self.tracks)
 
-        with open(self.outfile, 'w') as f:
+        with io.open(self.outfile, 'w', encoding="utf-8") as f:
             f.write(tracklist)
 
 
