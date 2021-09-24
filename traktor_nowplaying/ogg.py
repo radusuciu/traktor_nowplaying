@@ -28,9 +28,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+from typing import List
 import struct
 import os
 import codecs
+
 
 def parse_pages(fh):
     # for the spec, see: https://wiki.xiph.org/Ogg
@@ -58,7 +60,7 @@ def parse_pages(fh):
                 previous_page = b''
         header_data = fh.read(27)
 
-def parse_comment(fh):
+def parse_comment(fh) -> List[tuple]:
     # for the spec, see: http://xiph.org/vorbis/doc/v-comment.html
     # discnumber tag based on: https://en.wikipedia.org/wiki/Vorbis_comment
     # https://sno.phy.queensu.ca/~phil/exiftool/TagNames/Vorbis.html
@@ -80,7 +82,7 @@ def parse_comment(fh):
 
     metadata = []
 
-    for i in range(elements):
+    for _ in range(elements):
         length = struct.unpack('I', fh.read(4))[0]
         try:
             keyvalpair = codecs.decode(fh.read(length), 'UTF-8')

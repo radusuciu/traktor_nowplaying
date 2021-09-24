@@ -1,15 +1,15 @@
-from .options import PORT, QUIET, OUTPUT_FORMAT, APPEND, MAX_TRACKS
-from .ogg import parse_comment, parse_pages
-from .bottle import SimpleTemplate, TemplateError
 from collections import deque
-import functools
+from typing import List
 import http.server
 import html
 import socketserver
 import pathlib
-import types
 import io
 import os
+
+from .options import PORT, QUIET, OUTPUT_FORMAT, APPEND, MAX_TRACKS
+from .ogg import parse_comment, parse_pages
+from .bottle import SimpleTemplate, TemplateError
 
 
 def create_request_handler(callbacks):
@@ -79,7 +79,7 @@ class TrackWriter:
             except:
                 print(f'Error encountered while trying to write to {self.outfile}.')
 
-    def update(self, data):
+    def update(self, data: List[tuple]):
         info = dict(data)
 
         if not ('artist' in info or 'title' in info):
@@ -116,7 +116,7 @@ class TrackWriter:
         if self.template:
             tracklist = self.template.render(tracks=self.tracks)
         else:
-            tracklist = '\n'.join(self._get_track_string(t) for t in self.tracks)
+            tracklist = os.linesep.join(self._get_track_string(t) for t in self.tracks)
 
         with open(self.outfile, 'w', encoding='utf-8') as f:
             f.write(tracklist)

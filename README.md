@@ -134,3 +134,17 @@ If you save the above as `template.html` you can use it like so: `traktor_nowpla
 **Note**: Templates don't have to be HTML
 
 **Note**: `--template` overrides `--format`.
+
+## Development
+
+Some notes, mostly for myself about developing traktor_nowplaying.
+
+### Releasing
+
+Binary releases are created using [pysinstaller](https://www.pyinstaller.org/) and the following command:
+
+```bash
+pyinstaller traktor_nowplaying/cli.py -n traktor_nowplaying --onefile --icon=assets/icon.ico
+```
+
+These are automatically handled by GitHub actions, which are triggered when a new tag is pushed.
