@@ -39,7 +39,7 @@ parser.add_argument('-o', '--outfile', default=None,
 )
 
 parser.add_argument('-t', '--template', default=None,
-    help='Template file to use for output. Templating is implemented using Bottle SimpleTemplate (https://bottlepy.org/docs/0.12/stpl.html). See README for more details on use. Note: the --format options is ignored when using a custom template file. Take care when using templates provided by others on the internet as they can contain malicious code.'
+    help='Template file to use for output. Templating is implemented using Bottle SimpleTemplate (https://bottlepy.org/docs/0.13/stpl.html). See README for more details on use. Note: the --format options is ignored when using a custom template file. Take care when using templates provided by others on the internet as they can contain malicious code.'
 )
 
 parser.add_argument('-a', '--append', default=APPEND,

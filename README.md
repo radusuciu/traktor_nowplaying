@@ -4,7 +4,7 @@
 
 # Traktor Now Playing
 
-This project for Python 3 (tested on 3.6+) uses Traktor's broadcast functionality to extract metadata about the currently playing song. This is really a very thin wrapper around some [tinytag](https://github.com/devsnd/tinytag) methods that can be found in `ogg.py`, where the original license is also included. There are no dependencies. Tested with Traktor 3.3, but this will likely work with older versions as well.
+This project requires Python 3.8 or newer (tested on 3.8 through 3.14) and uses Traktor's broadcast functionality to extract metadata about the currently playing song. This is really a very thin wrapper around some [tinytag](https://github.com/devsnd/tinytag) methods that can be found in `ogg.py`, where the original license is also included. There are no dependencies. Tested with Traktor 3.3, but this will likely work with older versions as well.
 
 The reason this exists is because it's rather difficult to get this information through other means. You can [use MIDI](https://github.com/Sonnenstrahl/traktor-now-playing) for this as well, but that requires that you add a fake controller.
 
@@ -61,7 +61,7 @@ optional arguments:
   -t TEMPLATE, --template TEMPLATE
                         Template file to use for output. Templating is
                         implemented using Bottle SimpleTemplate
-                        (https://bottlepy.org/docs/0.12/stpl.html). See README
+                        (https://bottlepy.org/docs/0.13/stpl.html). See README
                         for more details on use. Note: the --format options is
                         ignored when using a custom template file. Take care
                         when using templates provided by others on the internet
@@ -103,7 +103,7 @@ For a more elaborate example with a custom callback, see this project: https://g
 
 ## Customizing output
 
-The output of `traktor_nowplaying` can be customized using the `--format` and `--template` options. Both of these functions make use of the [`SimpleTemplate` Engine](https://bottlepy.org/docs/0.12/stpl.html) included with [Bottle 0.12](https://bottlepy.org/docs/0.12/), so anything you can use with Bottle's templates, you can use here.
+The output of `traktor_nowplaying` can be customized using the `--format` and `--template` options. Both of these functions make use of the [`SimpleTemplate` Engine](https://bottlepy.org/docs/0.13/stpl.html) included with [Bottle 0.13](https://bottlepy.org/docs/0.13/), so anything you can use with Bottle's templates, you can use here.
 
 **Note**: Please take care when using format strings or templates provided by others on the internet. These can contain malicious code. I doubt this will be the case since this is such an obscure project and I can't imagine templates being complex enough to hide malware, but you never know.
 
