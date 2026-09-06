@@ -102,6 +102,8 @@ jobs:
   Release:
     needs: [Linux, MacOS, Windows]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
@@ -129,44 +131,14 @@ jobs:
           path: ./
 
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.tag.outputs.tag }}
-          release_name: ${{ steps.tag.outputs.tag }}
-          draft: false
-          prerelease: false
-      - name: Upload Linux release file asset
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
-          asset_name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
-          asset_content_type: application/gzip
-
-      - name: Upload MacOS release file asset
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
-          asset_name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
-          asset_content_type: application/gzip
-
-      - name: Upload Windows release file asset
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
-          asset_name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
-          asset_content_type: application/zip
+          name: ${{ steps.tag.outputs.tag }}
+          files: |
+            traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
+            traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
+            traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
 
       - name: Set up Python
         uses: actions/setup-python@v7
