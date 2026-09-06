@@ -1,8 +1,6 @@
 """Setup script for traktor_nowplaying."""
 from setuptools import setup, find_packages, Command
 from shutil import rmtree
-import codecs
-import io
 import os
 import sys
 
@@ -10,7 +8,8 @@ here = os.path.abspath(os.path.dirname(__file__))
 
 def read(*parts):
     """Return multiple read calls to different readable objects as a single string."""
-    return codecs.open(os.path.join(here, *parts), 'r').read()
+    with open(os.path.join(here, *parts), 'r', encoding='utf-8') as f:
+        return f.read()
 
 NAME = 'traktor_nowplaying'
 DESCRIPTION = f'{NAME} uses Traktor\'s broadcast functionality to extract metadata about the currently playing song.'
@@ -51,8 +50,8 @@ class UploadCommand(Command):
         except OSError:
             pass
 
-        self.status('Building Source and Wheel (universal) distribution…')
-        os.system('{0} setup.py sdist bdist_wheel --universal'.format(sys.executable))
+        self.status('Building Source and Wheel distribution…')
+        os.system('{0} -m build'.format(sys.executable))
 
         self.status('Uploading the package to PyPi via Twine…')
         os.system('twine upload dist/*')
@@ -69,7 +68,7 @@ setup(
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
-    python_requires='>=3.6.2',
+    python_requires='>=3.8',
     packages=find_packages(exclude=('tests',)),
     entry_points={
         'console_scripts': ['traktor_nowplaying=traktor_nowplaying.cli:main']
@@ -77,16 +76,22 @@ setup(
     include_package_data=True,
     platforms='any',
     zip_safe=True,
-    license='MIT License',
+    license='MIT',
     classifiers=[
         'Environment :: Console',
         'Topic :: Multimedia :: Sound/Audio',
         'Intended Audience :: End Users/Desktop',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
+        'Programming Language :: Python :: 3.14',
         'Development Status :: 4 - Beta',
         'Natural Language :: English',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
