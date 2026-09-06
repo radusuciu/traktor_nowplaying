@@ -1,5 +1,6 @@
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/traktor-nowplaying.svg)](https://pypi.python.org/pypi/traktor-nowplaying/)
 [![PyPI version fury.io](https://img.shields.io/pypi/v/traktor-nowplaying.svg)](https://pypi.python.org/pypi/traktor-nowplaying/)
+[![Test](https://github.com/radusuciu/traktor_nowplaying/actions/workflows/test.yml/badge.svg)](https://github.com/radusuciu/traktor_nowplaying/actions/workflows/test.yml)
 [![GitHub release](https://img.shields.io/github/release/radusuciu/traktor_nowplaying.svg)](https://github.com/radusuciu/traktor_nowplaying/releases/)
 
 # Traktor Now Playing
@@ -138,6 +139,16 @@ If you save the above as `template.html` you can use it like so: `traktor_nowpla
 ## Development
 
 Some notes, mostly for myself about developing traktor_nowplaying.
+
+### Testing
+
+Tests use the standard library `unittest` module and have no extra dependencies:
+
+```bash
+python -m unittest tests -v
+```
+
+These run automatically via GitHub Actions on every push to `master` and on pull requests, across all supported Python versions.
 
 ### Releasing
 
