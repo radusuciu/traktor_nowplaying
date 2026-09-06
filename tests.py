@@ -2,11 +2,46 @@ from unittest import TestCase
 import unittest
 import tempfile
 import os
+import io
+import struct
 import socket
 import time
 import threading
 
 from traktor_nowplaying.core import TrackWriter, Listener
+from traktor_nowplaying.ogg import parse_comment
+
+
+def build_comment_header(comments, vendor=b'test'):
+    """Build the body of a Vorbis comment header (without the packet type/name)."""
+    out = struct.pack('<I', len(vendor)) + vendor
+    out += struct.pack('<I', len(comments))
+    for comment in comments:
+        out += struct.pack('<I', len(comment)) + comment
+    return io.BytesIO(out)
+
+
+class TestParseComment(TestCase):
+    def test_unknown_fields_are_passed_through_lowercased(self):
+        metadata = parse_comment(build_comment_header([
+            b'ARTIST=Test Artist',
+            b'TITLE=Test Title',
+            b'BPM=128',
+        ]))
+
+        self.assertEqual(metadata, [
+            ('artist', 'Test Artist'),
+            ('title', 'Test Title'),
+            ('bpm', '128'),
+        ])
+
+    def test_known_fields_keep_mapped_names(self):
+        metadata = parse_comment(build_comment_header([
+            b'DATE=2024',
+            b'TRACKNUMBER=3',
+        ]))
+
+        self.assertEqual(metadata, [('year', '2024'), ('track', '3')])
 
 
 class TestTrackWriter(TestCase):

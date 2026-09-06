@@ -27,7 +27,9 @@ In order for this program to work, you of course have to setup the broadcasting 
 
 You must configure Traktor to broadcast to `localhost` and the port specified with the `-p`, or `--port` option (defaults to `8000`), or the port that is passed to the constructor if you're using this as a library instead. For the format setting you can use anything, but I recommend choosing the lowest bitrate for the sample rate of your system, so most commonly the best choice is 44100 Hz, 64 Kbps.
 
-Note that there is a delay between when you change a song in Traktor and when the change is picked up.
+Note that there is a delay between when you change a song in Traktor and when the change is picked up. This delay comes from Traktor itself: it buffers the audio before sending it, and it only sends the new track information once it has decided that the track has changed. `traktor_nowplaying` reports the change as soon as it arrives.
+
+Also note that Traktor only sends the artist and title of the current track. Other information like BPM or key is not part of the broadcast, so `traktor_nowplaying` cannot provide it.
 
 ## Use from command line
 
@@ -99,6 +101,24 @@ from traktor_nowplaying import Listener
 listener = Listener(port=8000, quiet=True, outfile='nowplaying.txt')
 listener.start()
 ```
+
+### Custom callbacks
+
+If you'd like to do something with the track information yourself, pass a function as `custom_callback`. It will be called every time Traktor sends new track information, with a list of `(field, value)` tuples containing everything Traktor sent:
+
+```python
+from traktor_nowplaying import Listener
+
+def on_track_change(data):
+    info = dict(data)
+    print(f"{info.get('artist')} - {info.get('title')}")
+    print(data)  # see everything that Traktor sent
+
+listener = Listener(port=8000, quiet=True, custom_callback=on_track_change)
+listener.start()
+```
+
+Note that `listener.start()` blocks, so there is no need for a loop to keep the program running.
 
 For a more elaborate example with a custom callback, see this project: https://github.com/radusuciu/traktor_ice, and [this bit](https://github.com/radusuciu/traktor_ice/blob/b0873cb5e36dbcb87a260900f44a2f1768d5d5c9/traktor_ice/core.py#L60-L74) in particular.
 
