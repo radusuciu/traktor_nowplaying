@@ -90,8 +90,10 @@ def parse_comment(fh) -> List[tuple]:
             continue
         if '=' in keyvalpair:
             key, value = keyvalpair.split('=', 1)
-            fieldname = comment_type_to_attr_mapping.get(key.lower())
-            if fieldname:
-                metadata.append((fieldname, value))
+            key = key.lower()
+            # known fields get friendlier names, everything else is passed
+            # through as-is so that nothing Traktor sends is lost
+            fieldname = comment_type_to_attr_mapping.get(key, key)
+            metadata.append((fieldname, value))
 
     return metadata
