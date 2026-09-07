@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=77"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "traktor_nowplaying"
@@ -38,8 +38,5 @@ Homepage = "https://github.com/radusuciu/traktor_nowplaying"
 [project.scripts]
 traktor_nowplaying = "traktor_nowplaying.cli:main"
 
-[tool.setuptools.dynamic]
-version = { attr = "traktor_nowplaying.version.__version__" }
-
-[tool.setuptools.packages.find]
-include = ["traktor_nowplaying*"]
+[tool.hatch.version]
+path = "traktor_nowplaying/version.py"
