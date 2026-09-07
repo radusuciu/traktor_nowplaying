@@ -9,7 +9,22 @@ on:
 
 jobs:
 
+  Verify:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v7
+    - name: Check that the tag matches the package version
+      run: |
+        tag="${GITHUB_REF#refs/tags/v}"
+        version="$(sed -n "s/^__version__ = '\(.*\)'$/\1/p" traktor_nowplaying/version.py)"
+        if [ "$tag" != "$version" ]; then
+          echo "Tag v$tag does not match traktor_nowplaying/version.py ($version)"
+          exit 1
+        fi
+
   Linux:
+    needs: Verify
     runs-on: ubuntu-latest
 
     steps:
@@ -40,6 +55,7 @@ jobs:
         path: traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
 
   MacOS:
+    needs: Verify
     runs-on: macos-latest
     steps:
     - name: Checkout code
@@ -69,6 +85,7 @@ jobs:
         path: traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
 
   Windows:
+    needs: Verify
     runs-on: windows-latest
 
     steps:
@@ -99,15 +116,37 @@ jobs:
         name: traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
         path: traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
 
-  Release:
+  PyPI:
+    # Publish to PyPI only once every binary has built, and before the GitHub
+    # release is created, so a failure here does not leave a half-done release.
     needs: [Linux, MacOS, Windows]
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write # required for PyPI trusted publishing
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.14'
+      - name: Build sdist and wheel
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+          python -m build
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+  Release:
+    needs: PyPI
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
       - name: Get tag
         id: tag
         run: |
@@ -139,19 +178,3 @@ jobs:
             traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz
             traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz
             traktor_nowplaying-${{ steps.tag.outputs.tag }}-win.zip
-
-      - name: Set up Python
-        uses: actions/setup-python@v7
-        with:
-          python-version: '3.14'
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install build twine
-      - name: Build and publish
-        env:
-          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: |
-          python -m build
-          twine upload dist/*
