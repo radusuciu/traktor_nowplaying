@@ -165,7 +165,7 @@ Some notes, mostly for myself about developing traktor_nowplaying.
 Tests use the standard library `unittest` module and have no extra dependencies:
 
 ```bash
-python -m unittest tests -v
+python -m unittest discover -v
 ```
 
 These run automatically via GitHub Actions on every push to `master` and on pull requests, across all supported Python versions.
