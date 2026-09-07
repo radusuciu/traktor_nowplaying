@@ -44,7 +44,7 @@ jobs:
         pip install pyinstaller
     - name: Building release
       run: |
-        pyinstaller traktor_nowplaying/cli.py -n traktor_nowplaying --onefile --icon=assets/icon.ico
+        pyinstaller traktor_nowplaying/cli.py -n traktor_nowplaying --onefile --icon=assets/icon.ico --strip
     - name: Zipping release
       run: |
         tar -czvf traktor_nowplaying-${{ steps.tag.outputs.tag }}-linux.tar.gz README.md -C dist traktor_nowplaying
@@ -74,7 +74,7 @@ jobs:
         pip install pyinstaller
     - name: Building release
       run: |
-        pyinstaller traktor_nowplaying/cli.py -n traktor_nowplaying --onefile --icon=assets/icon.ico
+        pyinstaller traktor_nowplaying/cli.py -n traktor_nowplaying --onefile --icon=assets/icon.ico --strip
     - name: Zipping release
       run: |
         tar -czvf traktor_nowplaying-${{ steps.tag.outputs.tag }}-macos.tar.gz README.md -C dist traktor_nowplaying
