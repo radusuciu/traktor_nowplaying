@@ -91,6 +91,8 @@ def _get_port_interactively():
             # and make sure it is valid
             if port < MIN_PORT or port > MAX_PORT:
                 raise ValueError
+
+            break
         except ValueError:
             print(f'Port needs to be an integer between {MIN_PORT}-{MAX_PORT}')
         except KeyboardInterrupt:
@@ -109,7 +111,7 @@ def interactive():
     _args = []
 
     if port:
-        _args.extend(['--port', port])
+        _args.extend(['--port', str(port)])
     if quiet:
         _args.extend(['--quiet'])
     if outfile:
