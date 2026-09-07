@@ -1,4 +1,5 @@
 from unittest import TestCase
+from contextlib import redirect_stdout
 import unittest
 import tempfile
 import os
@@ -45,17 +46,23 @@ class TestParseComment(TestCase):
 
 
 class TestTrackWriter(TestCase):
-    def test_file_output(self):
+    def test_stdout_output(self):
         writer = TrackWriter()
 
-        writer.update({
-            'title': 'Title',
-            'artist': 'Artist'
-        })
-        writer.update({
-            'title': '音楽',
-            'artist': 'Artist'
-        })
+        # capture stdout so the test does not depend on the console encoding
+        # (e.g. cp1252 on Windows when output is piped)
+        stdout = io.StringIO()
+        with redirect_stdout(stdout):
+            writer.update({
+                'title': 'Title',
+                'artist': 'Artist'
+            })
+            writer.update({
+                'title': '音楽',
+                'artist': 'Artist'
+            })
+
+        self.assertEqual(stdout.getvalue(), 'Artist - Title\nArtist - 音楽\n')
 
 
 class TestFileWriter(TestCase):
@@ -70,6 +77,10 @@ class TestFileWriter(TestCase):
                 append=True
             )
             writer.update([('artist', 'foo'), ('title', 'bar')])
+
+            # line endings from the format must be written verbatim on every platform
+            with open(test_file_path, 'rb') as f:
+                self.assertEqual(f.read(), b'foo\r\nbar')
 
             with open(test_file_path) as f:
                 self.assertEqual(len(f.readlines()), 2)
