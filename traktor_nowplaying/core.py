@@ -118,7 +118,10 @@ class TrackWriter:
         else:
             tracklist = os.linesep.join(self._get_track_string(t) for t in self.tracks)
 
-        with open(self.outfile, 'w', encoding='utf-8') as f:
+        # newline='' disables newline translation so that line endings from
+        # os.linesep or the template are written as-is (otherwise Windows
+        # turns every '\r\n' into '\r\r\n')
+        with open(self.outfile, 'w', encoding='utf-8', newline='') as f:
             f.write(tracklist)
 
 
