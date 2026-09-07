@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "traktor_nowplaying"
+dynamic = ["version"]
+description = "traktor_nowplaying uses Traktor's broadcast functionality to extract metadata about the currently playing song."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.8"
+authors = [
+    { name = "Radu Suciu", email = "radusuciu@gmail.com" },
+]
+classifiers = [
+    "Environment :: Console",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Intended Audience :: End Users/Desktop",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Development Status :: 5 - Production/Stable",
+    "Natural Language :: English",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.urls]
+Homepage = "https://github.com/radusuciu/traktor_nowplaying"
+
+[project.scripts]
+traktor_nowplaying = "traktor_nowplaying.cli:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "traktor_nowplaying.version.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["traktor_nowplaying*"]
